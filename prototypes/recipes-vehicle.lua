@@ -1,20 +1,26 @@
 data:extend({
-    {
-        type = "recipe",
-        name = "microwave-vehicle-receiver-small",
-        enabled = false,
-        energy_required = 3,
-        ingredients = { {"plastic-bar", 4}, {"processing-unit", 2}, {"microwave-receiver-small", 1} },
-		result="microwave-vehicle-receiver-small",
-        -- categories = {"armor"},
-    },
-    {
-        type = "recipe",
-        name = "microwave-vehicle-receiver-large",
-        enabled = false,
-        energy_required = 4,
-        ingredients = { {"plastic-bar", 8}, {"processing-unit", 4}, {"microwave-receiver-large", 1} },
-		result="microwave-vehicle-receiver-large",
-        -- categories = {"armor"},
-    }
+	{
+		type = "recipe",
+		name = "microwave-vehicle-receiver-small",
+		enabled = false,
+		energy_required = 3,
+		ingredients = { 
+			{type = "item", name = "plastic-bar", amount = 4}, 
+			{type = "item", name = "processing-unit", amount = 2}, 
+			{type = "item", name = "microwave-receiver-small", amount = 1} 
+		},
+		results={{type="item", name="microwave-vehicle-receiver-small", amount=1}},
+	},
+	{
+		type = "recipe",
+		name = "microwave-vehicle-receiver-large",
+		enabled = false,
+		energy_required = 4,
+		ingredients = { 
+			{type = "item", name = "plastic-bar", amount = 8}, 
+			{type = "item", name = "processing-unit", amount = 4}, 
+			{type = "item", name = "microwave-receiver-large", amount = 1} 
+		},
+		results={{type="item", name="microwave-vehicle-receiver-large", amount=1}},		
+	}
 })

@@ -4,58 +4,55 @@
 ----------------------------------------------------------------------------------------------------------------
 local microwaveTower = table.deepcopy(data.raw["electric-pole"]["big-electric-pole"])
 local mwTowerCorpse = table.deepcopy(data.raw["corpse"][microwaveTower.corpse])			
+
 mwTowerCorpse.name = "microwave-tower-remnants"
-data:extend{mwTowerCorpse}
+data:extend{ mwTowerCorpse }
 
 microwaveTower.name = "microwave-tower"
-microwaveTower.minable = {mining_time = 0.5, result = "microwave-tower"}
+microwaveTower.minable = { mining_time = 0.5, result = "microwave-tower" }
 microwaveTower.icon = "__camedo-microwave__/graphics/icons/tower.png"
 microwaveTower.icon_size = 32
 microwaveTower.fast_replaceable_group = "electric-pole"
 microwaveTower.corpse = mwTowerCorpse.name
-microwaveTower.pictures =
-{
-  layers =
-  {
-	{
-	  filename = "__camedo-microwave__/graphics/entity/tower/big-electric-pole.png",
-	  priority = "extra-high",
-	  width = 76,
-	  height = 156,
-	  direction_count = 4,
-	  shift = util.by_pixel(1, -51),
-	  hr_version =
-	  {
-		filename = "__camedo-microwave__/graphics/entity/tower/hr-big-electric-pole.png",
-		priority = "extra-high",
-		width = 148,
-		height = 312,
-		direction_count = 4,
-		shift = util.by_pixel(0, -51),
-		scale = 0.5
-	  }
-	},
-	{
-	  filename = "__camedo-microwave__/graphics/entity/tower/big-electric-pole-shadow.png",
-	  priority = "extra-high",
-	  width = 188,
-	  height = 48,
-	  direction_count = 4,
-	  shift = util.by_pixel(60, 0),
-	  draw_as_shadow = true,
-	  hr_version =
-	  {
-		filename = "__camedo-microwave__/graphics/entity/tower/hr-big-electric-pole-shadow.png",
-		priority = "extra-high",
-		width = 374,
-		height = 94,
-		direction_count = 4,
-		shift = util.by_pixel(60, 0),
-		draw_as_shadow = true,
-		scale = 0.5
-	  }
+microwaveTower.pictures = {
+	layers = {
+		{
+			filename = "__camedo-microwave__/graphics/entity/tower/big-electric-pole.png",
+			priority = "extra-high",
+			width = 76,
+			height = 156,
+			direction_count = 4,
+			shift = util.by_pixel(1, -51),
+			hr_version = {
+				filename = "__camedo-microwave__/graphics/entity/tower/hr-big-electric-pole.png",
+				priority = "extra-high",
+				width = 148,
+				height = 312,
+				direction_count = 4,
+				shift = util.by_pixel(0, -51),
+				scale = 0.5
+			}
+		},
+		{
+			filename = "__camedo-microwave__/graphics/entity/tower/big-electric-pole-shadow.png",
+			priority = "extra-high",
+			width = 188,
+			height = 48,
+			direction_count = 4,
+			shift = util.by_pixel(60, 0),
+			draw_as_shadow = true,
+			hr_version = {
+				filename = "__camedo-microwave__/graphics/entity/tower/hr-big-electric-pole-shadow.png",
+				priority = "extra-high",
+				width = 374,
+				height = 94,
+				direction_count = 4,
+				shift = util.by_pixel(60, 0),
+				draw_as_shadow = true,
+				scale = 0.5
+			}
+		}
 	}
-  }
 }
 
 data:extend{microwaveTower}
@@ -65,11 +62,11 @@ data:extend{microwaveTower}
 ----------------------------------------------------------------------------------------------------------------
 local transparent_pic =
 {
-  filename = "__camedo-microwave__/graphics/transparent.png",
-  priority = "extra-high",
-  width = 1,
-  height = 1,
-  frame_count = 1
+	filename = "__camedo-microwave__/graphics/transparent.png",
+	priority = "extra-high",
+	width = 1,
+	height = 1,
+	frame_count = 1
 }
 
 -- player_creation allows blueprinting and such, turned off.
@@ -80,11 +77,16 @@ local mwInterface = {
 	name="microwave-tower-interface",
 	icon=microwaveTower.icon,
 	icon_size=microwaveTower.icon_size,
-	flags = {"hidden", "hide-alt-info", "not-selectable-in-game", "not-upgradable", "not-flammable", "not-on-map", "not-repairable"},
-    max_health = 10000,
-	collision_mask = {"ghost-layer"},
-    collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
-    -- selection_box = {{0, 0}, {0, 0}}, --{{-0.5, -1}, {0.5, 1}},	
+	hidden = true,
+	flags = {
+		"hide-alt-info",
+		"not-selectable-in-game",
+		"not-upgradable",
+		"not-flammable",
+		"not-on-map",
+		"not-repairable"
+	},
+	max_health = 10000,
 	selection_box = nil,
 	selectable_in_game=false,
 	energy_source = {
@@ -97,4 +99,5 @@ local mwInterface = {
 	picture=transparent_pic,
 	order="z"
 }
+
 data:extend{mwInterface}
