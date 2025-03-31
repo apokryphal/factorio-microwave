@@ -1,26 +1,50 @@
 data:extend({
-    {
-        type = "recipe",
-        name = "microwave-tower",
-        enabled = false,
-        energy_required = 12,
-        ingredients = { {"processing-unit", 10}, {"battery", 5}, {"big-electric-pole", 1} },
-        result = "microwave-tower",
-    },	
-    {
-        type = "recipe",
-        name = "microwave-receiver-small",
-        enabled = false,
-        energy_required = 2,
-        ingredients = { {"plastic-bar", 2}, {"processing-unit", 2}, {"battery-equipment", 1} },
-		result="microwave-receiver-small",
-    },
-    {
-        type = "recipe",
-        name = "microwave-receiver-large",
-        enabled = false,
-        energy_required = 3,
-        ingredients = { {"microwave-receiver-small", 2}, {"processing-unit", 2}, {"battery-mk2-equipment", 1} },
-		result="microwave-receiver-large",
-    }
+		{
+				type = "recipe",
+				name = "microwave-tower",
+				enabled = false,
+				energy_required = 12,
+				ingredients = { 
+			{type = "item", name = "processing-unit", amount = 10}, 
+			{type = "item", name = "battery", amount = 5}, 
+			{type = "item", name = "big-electric-pole", amount = 1} 
+		},
+		results={{type="item", name="microwave-tower", amount=1}}
+		},	
+		{
+				type = "recipe",
+				name = "microwave-receiver-small",
+				enabled = false,
+				energy_required = 2,
+				ingredients = { 
+			{type = "item", name = "plastic-bar", amount = 2}, 
+			{type = "item", name = "processing-unit", amount = 2}, 
+			{type = "item", name = "battery-equipment", amount = 1} 
+		},
+		results={{type="item", name="microwave-receiver-small", amount=1}}
+		},
+		{
+				type = "recipe",
+				name = "microwave-receiver-large",
+				enabled = false,
+				energy_required = 3,
+				ingredients = { 
+			{type = "item", name = "microwave-receiver-small", amount = 2}, 
+			{type = "item", name = "processing-unit", amount = 2}, 
+			{type = "item", name = "battery-mk2-equipment", amount = 1} 
+		},
+		results={{type="item", name="microwave-receiver-large", amount=1}}
+		},
+		{
+				type = "recipe",
+				name = "microwave-receiver-biggus-dickus",
+				enabled = false,
+				energy_required = 3,
+				ingredients = { 
+			{type = "item", name = "microwave-receiver-large", amount = 10}, 
+			{type = "item", name = "processing-unit", amount = 100}, 
+			{type = "item", name = "battery-mk2-equipment", amount = 10} 
+		},
+		results={{type="item", name="microwave-receiver-biggus-dickus", amount=1}}
+		}
 })
