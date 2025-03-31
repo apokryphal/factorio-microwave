@@ -14,5 +14,7 @@ towerNew.maximum_wire_distance = towerBase.maximum_wire_distance	-- Match the wi
 towerNew.supply_area_distance = towerBase.supply_area_distance		-- Match the supply area.
 
 -- Update default equipment categories
-data.raw["battery-equipment"]["microwave-receiver-small"].categories = equipmentCategories -- { "armor" }
-data.raw["battery-equipment"]["microwave-receiver-large"].categories = equipmentCategories -- { "armor" }
+local eqCategories = getEquipmentCategories()
+data.raw["battery-equipment"]["microwave-receiver-small"].categories = eqCategories
+data.raw["battery-equipment"]["microwave-receiver-large"].categories = eqCategories
+data.raw["battery-equipment"]["microwave-receiver-biggus-dickus"].categories = eqCategories
