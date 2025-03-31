@@ -9,7 +9,7 @@ data:extend({
 	-- ------------------------------------------------
 	-- MICROWAVE CHARGING TECHNOLOGIES
 	-- ------------------------------------------------
-	
+
 	{
 		type = "technology",
 		name = "microwave-charging1",
