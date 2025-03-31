@@ -39,7 +39,7 @@ data:extend({
 		shape = { width = 3, height = 3, type = "full",},
 		energy_source = { 
 			type = "electric", 
-			buffer_capacity = "1MW",--"550kJ", 
+			buffer_capacity = "1MJ",--"550kJ", 
 			input_flow_limit = "1MW",--"550kW", 
 			output_flow_limit = "100kW",--"55kW", 
 			usage_priority = "tertiary" 
