@@ -10,7 +10,7 @@ data:extend({
 			{ type = "item", name = "microwave-receiver-small", amount = 1 }
 		},
 		results = {
-			{ type="item", name="microwave-vehicle-receiver-small", amount=1 }
+			{ type ="item", name ="microwave-vehicle-receiver-small", amount = 1 }
 		},
 	},
 	{
@@ -24,7 +24,7 @@ data:extend({
 			{ type = "item", name = "microwave-receiver-large", amount = 1 }
 		},
 		results = {
-			{ type="item", name="microwave-vehicle-receiver-large", amount=1 }
+			{ type ="item", name ="microwave-vehicle-receiver-large", amount = 1 }
 		},
 	}
 })
