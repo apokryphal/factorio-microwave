@@ -60,8 +60,7 @@ data:extend{microwaveTower}
 ----------------------------------------------------------------------------------------------------------------
 -- Microwave Tower Energy Interface
 ----------------------------------------------------------------------------------------------------------------
-local transparent_pic =
-{
+local transparent_pic = {
 	filename = "__camedo-microwave__/graphics/transparent.png",
 	priority = "extra-high",
 	width = 1,
