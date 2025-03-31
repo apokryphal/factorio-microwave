@@ -5,31 +5,31 @@ local Position = require("stdlib/area/position")
 local passive_tower_draw = 20000		-- 20 KW passive draw.
 
 local chargable_types = { "character", "car", "tank", "spider-vehicle", "artillery-wagon", "cargo-wagon", "fluid-wagon", "locomotive" }
-local receiverNames = { "microwave-receiver-small", "microwave-receiver-large", "microwave-vehicle-receiver-small", "microwave-vehicle-receiver-large" }
+local receiverNames = { "microwave-receiver-small", "microwave-receiver-large", "microwave-receiver-biggus-dickus", "microwave-vehicle-receiver-small", "microwave-vehicle-receiver-large" }
 
 function update_settings()
-	global.showDebug = settings.global["mw-show-debug"].value
-	global.mwChargeRadius = settings.global["mw-charge-radius"].value
-	global.mwChargeInterval = settings.global["mw-charge-interval"].value
-	global.mwSearchInterval = settings.global["mw-search-interval"].value
+	storage.showDebug = settings.global["mw-show-debug"].value
+	storage.mwChargeRadius = settings.global["mw-charge-radius"].value
+	storage.mwChargeInterval = settings.global["mw-charge-interval"].value
+	storage.mwSearchInterval = settings.global["mw-search-interval"].value
 	
-	if ( global.showDebug ) then game.print("[Microwave] Runtime Settings Changed.") end	
+	if ( storage.showDebug ) then game.print("[Microwave] Runtime Settings Changed.") end	
 end
 
 -- Divide by this to handle scaling for various tick cycles. 1.0 at 60 ticks, 4.0 at 15 ticks, etc. 
 function tick_scale()
-	return (60 / global.mwChargeInterval)
+	return (60 / storage.mwChargeInterval)
 end
 
 function count_towers()
 	local c = 0
-	for _,tower in pairs(global.microwaves) do c = c + 1 end
+	for _,tower in pairs(storage.microwaves) do c = c + 1 end
 	return c
 end
 
 function find_tower_from_entity(entity)
 	local r = nil
-	for id,tower in pairs(global.microwaves) do
+	for id,tower in pairs(storage.microwaves) do
 		if ( tower.entity == entity ) then r=tower end
 	end
 	return r
@@ -37,7 +37,7 @@ end
 
 function register_tower(entity)
 	-- stored is used to buffer the energy in a link when it's being rebuilt. (If we.. implement that)
-	table.insert(global.microwaves, { entity=entity, link=nil, target=nil, beam=nil, stored=0 })	
+	table.insert(storage.microwaves, { entity=entity, link=nil, target=nil, beam=nil, stored=0 })	
 	debug_log("Registered tower - " .. count_towers() .. " in list.")
 end
 
@@ -48,14 +48,14 @@ function unregister_tower(entity)
 		if ( tower.link ) then tower.link.destroy() end		
 		tower.entity = nil
 
-		global.microwaves = table.filter(global.microwaves, function(e) return e.entity end)
+		storage.microwaves = table.filter(storage.microwaves, function(e) return e.entity end)
 	
 		debug_log("Unregistered tower - " .. count_towers() .. " remain after cleanup.")
 	end
 end
 
 function on_init()
-	global.microwaves = global.microwaves or {}
+	storage.microwaves = storage.microwaves or {}
 	update_settings()
 end
 
@@ -87,7 +87,7 @@ end
 
 function is_target_charging(target)
 	local is_charging = false
-	table.each(global.microwaves, function(tower)
+	table.each(storage.microwaves, function(tower)
 		if ( tower.target and tower.target == target ) then is_charging = true end
 	end)
 	return is_charging
@@ -101,7 +101,7 @@ function send_power_to_equipment(eq, available)
 	if ( not eq or not eq.valid ) then return 0 end
 	
 	local eq_max_in = (eq.max_energy - eq.energy)
-	if ( eq.prototype and eq.prototype.energy_source ) then eq_max_in = eq.prototype.energy_source.input_flow_limit end
+	if ( eq.prototype and eq.prototype.energy_source ) then eq_max_in = eq.prototype.energy_source.get_input_flow_limit() end
 	-- eq_max_in = eq_max_in / 60			-- Scale work for tick cycle
 	eq_max_in = eq_max_in / tick_scale()	-- Scale work for tick cycle
 
@@ -162,8 +162,11 @@ function inspect_grid(target)
 		if ( eq.type == "battery-equipment" ) then
 			-- Determine max input rate for this piece of equipment
 			eq_max_in = (eq.max_energy - eq.energy)
-			if ( eq.prototype and eq.prototype.energy_source ) then 
-				eq_max_in = eq.prototype.energy_source.input_flow_limit * 60	-- Convert joule/tick back into joule/second
+			if ( eq.prototype and eq.prototype.energy_source ) then
+				local inputLimit = eq.prototype.energy_source.get_input_flow_limit()
+				if ( inputLimit ) then
+					eq_max_in = eq.prototype.energy_source.get_input_flow_limit() * 60	-- Convert joule/tick back into joule/second
+				end
 			end		
 		
 			-- If this a Receiver? We use these to determine our max wireless receive rate.
@@ -188,7 +191,7 @@ function inspect_grid(target)
 end
 
 function debug_log(message, tower) 
-	if not ( global.showDebug ) then return false end
+	if not ( storage.showDebug ) then return false end
 	
 	local suffix = ""
 	if tower and tower.entity then
@@ -210,7 +213,7 @@ function microwave_charge_entity(tower)
 	
 	-- Check our range to entity. We might also end up using this to scale power efficency.
 	local range = Position.distance(tower.entity.position, tower.target.position)
-	if ( range > global.mwChargeRadius ) then return true end
+	if ( range > storage.mwChargeRadius ) then return true end
 	
 	-- Determine the work we want to do, and scale to tick cycle.
 	local status = inspect_grid(tower.target)		
@@ -238,7 +241,7 @@ end
 
 -- TODO: We may need to figure out a better solution for search types. Maybe data-final-fixes can scan for all prototypes that include an equipment grid and store a list in global?
 function microwave_search_target(tower)
-	local search = tower.entity.surface.find_entities_filtered{position=tower.entity.position, radius=global.mwChargeRadius, force=tower.entity.force, type=chargable_types}
+	local search = tower.entity.surface.find_entities_filtered{position=tower.entity.position, radius=storage.mwChargeRadius, force=tower.entity.force, type=chargable_types}
 	
 	search = table.filter(search, function(e) return (e.valid) end)
 	search = table.filter(search, function(e) return (is_target_charging(e) == false) end)
@@ -267,11 +270,11 @@ script.on_init(function() on_init() end)
 script.on_configuration_changed(function() on_configuration_changed() end)
 
 script.on_event(defines.events.on_tick, function (e)	  
-	global.microwaves = global.microwaves or {}
+	storage.microwaves = storage.microwaves or {}
 
 	-- Tower Interval: Charge Existing Targets (Runs every tick right now)
-	if ( e.tick % global.mwChargeInterval == 0 ) then
-		local towers = table.filter(global.microwaves, function(e) return (e.entity and e.entity.valid) end)
+	if ( e.tick % storage.mwChargeInterval == 0 ) then
+		local towers = table.filter(storage.microwaves, function(e) return (e.entity and e.entity.valid) end)
 		table.each(towers, function(tower)
 			-- Ensure we have an electric energy interface
 			if ( (not tower.link) or (not tower.link.valid) ) then
@@ -297,8 +300,8 @@ script.on_event(defines.events.on_tick, function (e)
 	end
 	
 	-- Tower Interval: Search for charge targets
-	if ( e.tick % global.mwSearchInterval == 0 ) then
-		local towers = table.filter(global.microwaves, function(e) return (e.entity and e.entity.valid and not e.target) end)
+	if ( e.tick % storage.mwSearchInterval == 0 ) then
+		local towers = table.filter(storage.microwaves, function(e) return (e.entity and e.entity.valid and not e.target) end)
 		table.each(towers, function(tower)
 			microwave_search_target(tower)
 		end)
@@ -338,7 +341,7 @@ end
 
 -- Scan all tower targets and clear them if their forces or surface no longer match.
 function reset_targets()
-	local towers = table.filter(global.microwaves, function(e) return (e.entity and e.entity.valid) end)
+	local towers = table.filter(storage.microwaves, function(e) return (e.entity and e.entity.valid) end)
 	table.each(towers, function(tower)
 		if ( tower.entity and tower.entity.valid and tower.target and tower.target.valid ) then
 			if ( tower.target.force == tower.entity.force and tower.entity.surface.index == tower.target.surface.index ) then
