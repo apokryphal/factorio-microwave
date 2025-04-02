@@ -90,9 +90,9 @@ local mwInterface = {
 	selectable_in_game=false,
 	energy_source = {
 		type="electric",
-		buffer_capacity="2MJ",
+		buffer_capacity="10MJ",
 		usage_priority="secondary-input",
-		input_flow_limit="2MW",
+		input_flow_limit="100MW",
 		output_flow_limit="0W"
 	},
 	picture=transparent_pic,
